@@ -6,10 +6,10 @@ import Button from 'react-bootstrap/Button'
 import AddTask from './AddTask';
 import auth from '../../firebase.init';
 import { signOut } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const ToDo = () => {
 
-    // const [complete, setComplete] = useState(false)
 
     const { data: tasks, isLoading, refetch, error } = useQuery('tasks', () => fetch('http://localhost:5000/tasks').then(res => res.json()));
 
@@ -34,29 +34,30 @@ const ToDo = () => {
 
     // text-decoration-line-through;
     const handleComplete = (task) => {
-        // setComplete(true);
-        // const updateInfo = {
-        //     taskName: `<del>${task.taskName}</del>`,
-        //     taskDescription: `<del>${task.taskDescription}</del>`,
-        //     isComplete: true
-        // }
-        // console.log(updateInfo);
+        toast.success(`${task.taskName} is completed`)
+        const updateInfo = {
+            complete: true,
+            completeClass: 'text-decoration-line-through',
+        }
+        console.log(updateInfo);
 
-        // fetch(`http://localhost:5000/tasks/${task._id}`, {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(updateInfo)
-        // })
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         console.log(data)
-        //         refetch();
-        //     })
+        fetch(`http://localhost:5000/tasks/${task._id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateInfo)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                refetch();
+            })
 
 
     }
+
+
     return (
         <div>
             <h1 className="text-warning p-5">Simple Todo App <span className='text-danger'> <MdSpeakerNotes /></span></h1>
@@ -64,7 +65,7 @@ const ToDo = () => {
 
             <p className="text-end">
                 <Button
-                onClick={()=> signOut(auth)}
+                    onClick={() => signOut(auth)}
                 >Logout</Button></p>
             <Table hover striped bordered responsive>
                 <thead>
@@ -79,10 +80,11 @@ const ToDo = () => {
                     {
                         tasks?.map((task, index) => <tr key={task._id}>
                             <td>{index + 1}</td>
-                            <td className=''>{task.taskName}</td>
-                            <td className=''>{task.taskDescription}</td>
+                            <td className={task?.completeClass}>{task.taskName}</td>
+                            <td className={task?.completeClass}>{task.taskDescription}</td>
                             <td>
                                 <Button
+                                    disabled={task?.complete}
                                     onClick={() => handleComplete(task)}
                                     variant="success" size="sm">
                                     Completed
