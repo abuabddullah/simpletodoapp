@@ -8,7 +8,7 @@ const AddTask = ({refetch}) => {
         const taskInfo = data;
         console.log(taskInfo);
         
-        fetch('http://localhost:5000/tasks', {
+        fetch('https://agile-savannah-03150.herokuapp.com/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 const ToDo = () => {
 
 
-    const { data: tasks, isLoading, refetch, error } = useQuery('tasks', () => fetch('http://localhost:5000/tasks').then(res => res.json()));
+    const { data: tasks, isLoading, refetch, error } = useQuery('tasks', () => fetch('https://agile-savannah-03150.herokuapp.com/tasks').then(res => res.json()));
 
     if (isLoading) {
         return <div>Loading...</div>
@@ -19,7 +19,7 @@ const ToDo = () => {
 
     const handleDelete = (_id) => {
         // console.log(_id);
-        fetch(`http://localhost:5000/tasks/${_id}`, {
+        fetch(`https://agile-savannah-03150.herokuapp.com/tasks/${_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ const ToDo = () => {
         }
         console.log(updateInfo);
 
-        fetch(`http://localhost:5000/tasks/${task._id}`, {
+        fetch(`https://agile-savannah-03150.herokuapp.com/tasks/${task._id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
